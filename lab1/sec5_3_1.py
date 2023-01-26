@@ -52,9 +52,9 @@ npACF = np.correlate(data, data, mode = "full")
 acTimes = np.linspace(-2047*timeStep*1e3,2047*timeStep*1e3, 4095)
 
 ax[0][0].plot(iftTimes,np.fft.fftshift(invPowerSpectrum), label = "IFT", ls = "", marker= ".")
-ax[0][1].plot(iftTimes[1024-25:1025+25],np.fft.fftshift(invPowerSpectrum)[1024-25:1024+26], label = "IFT", ls = "-", marker = ".")
+ax[0][1].plot(iftTimes[1024-25:1025+25],np.fft.fftshift(invPowerSpectrum)[1024-25:1024+26], label = "IFT", ls = "-", marker = "o")
 ax[1][0].plot(acTimes,npACF, label = "numpy", ls = "", marker = ".", color = "tab:green")
-ax[1][1].plot(acTimes[2048-50:2048+50],npACF[2048-50:2048+50], label = "numpy", ls = "-", marker = ".", color = "tab:green")
+ax[1][1].plot(acTimes[2048-50:2048+50],npACF[2048-50:2048+50], label = "numpy", ls = "-", marker = "o", color = "tab:green")
 
 ax[0][0].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10, labeltop = True, labelbottom = False)
 ax[0][0].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
