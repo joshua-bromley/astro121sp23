@@ -33,9 +33,9 @@ tickLabelSize = 26
 textSize = 26
 
 
-filename ="datas300.gz"
+filename ="data_500kHzFreq_3000kHzSamp2.gz"
 
-signalRate = 1e6 #Signal Rate in HZ
+signalRate = 0.5e6 #Signal Rate in HZ
 sampleRate = 3e6 #Sample rates in Hz
 
 data = np.loadtxt("./lab1data/"+filename)
@@ -83,9 +83,9 @@ spACF = scipy.signal.correlate(data, data)
 acTimes = np.linspace(-2047*timeStep*1e3,2047*timeStep*1e3, 4095)
 iftTimes = np.linspace(-2048*timeStep*1e3,2048*timeStep*1e3, 2048)
 
-ax1[0].plot(iftTimes,np.fft.fftshift(invPowerSpectrum), label = "IFT", ls = "", marker = ".")
-ax1[1].plot(acTimes,npACF, label = "numpy", ls = "", marker = ".")
-ax1[2].plot(acTimes,spACF, label = "scipy", ls = "", marker = ".")
+ax1[0].plot(iftTimes,np.fft.fftshift(invPowerSpectrum), label = "IFT", ls = "-", marker = ".")
+ax1[1].plot(acTimes,npACF, label = "numpy", ls = "-", marker = ".")
+ax1[2].plot(acTimes,spACF, label = "scipy", ls = "-", marker = ".")
 
 ax1[0].set_xlabel("Time Difference (ms)", fontsize = axesLabelSize)
 ax1[0].xaxis.set_label_position("top")
