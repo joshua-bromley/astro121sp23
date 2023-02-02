@@ -51,18 +51,27 @@ leakedFrequencies = np.fft.fftfreq(len(leakedPowerSpectrum), timeStep)
 fig, ax = plt.subplots(2,1, figsize = (6,8))
 
 ax[0].plot(np.fft.fftshift(leakedFrequencies)*1e-6,np.fft.fftshift(leakedPowerSpectrum)*1e-6)
-ax[0].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6)
-ax[0].set_xlabel("Frequency (MHz)")
-ax[0].set_ylabel("Power (mV)")
+ax[0].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, ls = ":")
+ax[0].set_xlabel("Frequency (MHz)", fontsize = axesLabelSize)
+ax[0].set_ylabel("Power (mV)", fontsize = axesLabelSize)
 
 ax[0].set_yscale("log")
 
 ax[1].plot(np.fft.fftshift(leakedFrequencies)*1e-6,np.fft.fftshift(leakedPowerSpectrum)*1e-6)
-ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6)
-ax[1].set_xlabel("Frequency (MHz)")
-ax[1].set_ylabel("Power (mV)")
+ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, ls = ":")
+ax[1].set_xlabel("Frequency (MHz)", fontsize = axesLabelSize)
+ax[1].set_ylabel("Power (mV)", fontsize = axesLabelSize)
 
 ax[1].set_xlim(0.66,0.7)
 ax[1].set_ylim(0,0.2)
+
+ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[0].tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[0].tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[1].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[1].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
 plt.savefig("./images/spectralLeakagenp.jpg")
