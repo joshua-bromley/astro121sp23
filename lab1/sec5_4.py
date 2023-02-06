@@ -44,8 +44,8 @@ frequencies = np.arange(-sampleRate/2,sampleRate/2,sampleRate/len(data))
 frequencies, voltageSpectrum = ug.dft.dft(data, times, frequencies)
 powerSpectrum = np.multiply(np.abs(voltageSpectrum), np.abs(voltageSpectrum))
 
-leakedFrequencies = np.arange(-sampleRate/2,sampleRate/2,0.001*sampleRate/len(data))
-leakedFrequencies, leakedVoltageSpectrum = ug.dft.dft(data, times, frequencies, vsamp =1)
+leakedFrequencies = np.arange(-sampleRate/2,sampleRate/2,0.01*sampleRate/len(data))
+leakedFrequencies, leakedVoltageSpectrum = ug.dft.dft(data, times, leakedFrequencies, vsamp =1000)
 leakedPowerSpectrum = np.multiply(np.abs(leakedVoltageSpectrum), np.abs(leakedVoltageSpectrum))
 
 fig, ax = plt.subplots(2,1, figsize = (6,8))
@@ -75,3 +75,5 @@ ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "major", direct
 ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
 plt.savefig("./images/spectralLeakage.jpg")
+
+print(len(leakedFrequencies))

@@ -46,12 +46,17 @@ powerSpectrum = np.multiply(np.abs(voltageSpectrum), np.abs(voltageSpectrum))
 
 fig,ax = plt.subplots(1,1, figsize = (6,4))
 
-ax.plot(frequencies*1e-6, powerSpectrum*1e-6)
+ax.plot(frequencies*1e-6, powerSpectrum*1e-6, color = "xkcd:royal")
 
 for i in np.arange(-2*sampleRate,2*sampleRate+1,sampleRate/2):
-    ax.vlines(i*1e-6, -0.1,1,color = "tab:red")
+    ax.vlines(i*1e-6, -0.1,1,color = "xkcd:light urple")
 
 ax.set_xlabel("Frequency (MHz)", fontsize = axesLabelSize)
 ax.set_ylabel("Power ($mV^2$)", fontsize = axesLabelSize)
+
+ax.tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
 fig.savefig("./images/windows.png")
