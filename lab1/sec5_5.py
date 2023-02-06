@@ -37,7 +37,7 @@ data = np.loadtxt("./lab1data/"+filename)
 sampleRate = 3e6
 timeStep = 1/sampleRate
 
-voltageSpectrum = np.abs(np.fft.fft(data, len(data)*100))
+voltageSpectrum = np.abs(np.fft.fft(data, len(data)*1000))
 powerSpectrum = np.multiply(voltageSpectrum,voltageSpectrum)
 frequencies = np.fft.fftfreq(len(powerSpectrum), timeStep)
 
