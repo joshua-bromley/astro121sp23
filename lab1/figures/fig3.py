@@ -108,3 +108,11 @@ plt.tight_layout(h_pad = 0)
 plt.savefig("../images/nyquist.png")
 plt.savefig("../images/pdfs/nyquist.pdf")
 
+for i in range(len(frequencies)):
+    if powerSpectrum[i] > 0.9:
+        print("2000 kHz:" + str(frequencies[i]))
+
+for i in range(len(frequenciesTwo)):
+    if powerSpectrumTwo[i] > 0.9:
+        print("1000 kHz: " + str(frequenciesTwo[i]))
+

@@ -63,6 +63,12 @@ ax.set_ylim(-0.01,0.1)
 
 ax.legend(frameon = False, fontsize = textSize)
 
+ax.tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+
+
 plt.tight_layout()
 plt.savefig("../images/spectralLeakageFinal.png")
 plt.savefig("../images/pdfs/spectralLeakageFinal.pdf")

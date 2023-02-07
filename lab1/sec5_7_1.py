@@ -35,7 +35,7 @@ data = np.loadtxt("./lab1data/data_noise_200blocks_2048samples_10MHzLPfilter_32e
 sampleRate = 3e6
 timeStep = 1/sampleRate
 
-oneBlock = data[0]
+oneBlock = data[34]
 twoBlocks = 0.5*(data[1]+data[2])
 fourBlocks = 0.25*(np.sum(data[3:7], axis = 0))
 eightBlocks = 0.125*(np.sum(data[8:16], axis = 0))

@@ -32,14 +32,15 @@ axesLabelSize = 34
 tickLabelSize = 26
 textSize = 26
 
-filename ="data_500kHzFreq_3000kHzSamp2.gz"
+filename ="data_noise_1blocks_16384samples_10MHzLPfilter_32e5HzRate.csv"
+
 
 signalRate = 0.5e6 #Signal Rate in HZ
-sampleRate = 3e6 #Sample rates in Hz
+sampleRate = 3.2e6 #Sample rates in Hz
 
-data = np.loadtxt("./lab1data/"+filename)*0.1
+data = np.loadtxt("./lab1data/"+filename, delimiter = ",")
 timeStep = 1/sampleRate
-voltageSpectrum = np.fft.fft(data)
+voltageSpectrum = np.fft.fft(data, n = 2*len(data)-1)
 magSpectrum = np.abs(voltageSpectrum)
 powerSpectrum = np.multiply(magSpectrum,magSpectrum)
 
@@ -47,14 +48,15 @@ fig, ax = plt.subplots(2,2, figsize = (24,16))
 fig.subplots_adjust(hspace = 0, wspace = 0)
 
 invPowerSpectrum = np.fft.ifft(powerSpectrum)
-iftTimes = np.linspace(-2048*timeStep*1e3,2048*timeStep*1e3, 2048)
+iftTimes = np.linspace(-len(data)*timeStep*1e3,len(data)*timeStep*1e3, 2*len(data))
 npACF = np.correlate(data, data, mode = "full")
-acTimes = np.linspace(-2047*timeStep*1e3,2047*timeStep*1e3, 4095)
+acTimes = np.linspace(-len(data)*timeStep*1e3,len(data)*timeStep*1e3, 2*len(data)-1)
 
-ax[0][0].plot(iftTimes,np.fft.fftshift(invPowerSpectrum), label = "IFT", ls = "", marker= ".")
-ax[0][1].plot(iftTimes[1024-25:1025+25],np.fft.fftshift(invPowerSpectrum)[1024-25:1024+26], label = "IFT", ls = "-", marker = "o")
+ax[0][0].plot(acTimes,np.fft.fftshift(invPowerSpectrum), label = "IFT", ls = "", marker= ".")
+ax[0][1].plot(acTimes, np.fft.fftshift(invPowerSpectrum)-npACF, ls = "", marker = ".")
+#ax[0][1].plot(iftTimes[8192-200:8192+200],np.fft.fftshift(invPowerSpectrum)[8192-200:8192+200], label = "IFT", ls = "-", marker = "o")
 ax[1][0].plot(acTimes,npACF, label = "numpy", ls = "", marker = ".", color = "tab:green")
-ax[1][1].plot(acTimes[2048-50:2048+50],npACF[2048-50:2048+50], label = "numpy", ls = "-", marker = "o", color = "tab:green")
+#ax[1][1].plot(acTimes[16384-400:16384+400],npACF[16384-400:16384+400], label = "numpy", ls = "-", marker = "o", color = "tab:green")
 
 ax[0][0].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10, labeltop = True, labelbottom = False)
 ax[0][0].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
@@ -79,6 +81,7 @@ ax[1][0].set_xlabel("Time Difference (ms)", fontsize = axesLabelSize)
 ax[1][0].set_ylabel("Correlation ($V^2$)", fontsize = axesLabelSize)
 ax[1][1].set_xlabel("Time Difference (ms)", fontsize = axesLabelSize)
 
+'''
 for axes in ax:
     for axis in axes:
         axis.set_ylim(-15,15)
@@ -96,8 +99,7 @@ ax[1][1].set_xticks([-0.015,-0.005,0.005,0.015])
 
 ax[0][0].text(-0.7,10, "IFT", fontsize = textSize)
 ax[1][0].text(-0.7,10, "np.correlate", fontsize = textSize)
+'''
 
-
-plt.savefig("./images/autoCorrelate2"+".jpg")
-plt.savefig("./images/pdfs/autoCorrelate2"+".pdf")
-
+plt.savefig("./images/noiseAutoCorrelate.png")
+plt.savefig("../images/pdfs/noiseAutoCorrelate.pdf")

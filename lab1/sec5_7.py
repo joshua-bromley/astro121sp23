@@ -34,20 +34,19 @@ textSize = 13
 data = np.loadtxt("./lab1data/data_noise_1blocks_16384samples_10MHzLPfilter_32e5HzRate.csv", delimiter = ",")
 bigData = np.loadtxt("./lab1data/data_noise_200blocks_2048samples_10MHzLPfilter_32e5HzRate.csv", delimiter = ",")
 
-mean = np.mean(data)
-stdDev = np.std(data)
+mean = np.mean(data, axis = 0)
+stdDev = np.std(data, axis = 0)
 
 x = np.linspace(-1,1,100)
 y = (1/(stdDev*np.sqrt(2*np.pi)))*np.exp(-0.5*((x-mean)/stdDev)**2)
 
-maxY = np.max(y)
+
 
 fig, ax = plt.subplots(1,1, figsize = (6,4))
 
-histogram = ax.hist(data, bins = 50, color = "#0d265c")
-maxVal = np.max(histogram[0])
+histogram = ax.hist(data, bins = 50, color = "#0d265c", density = True)
 
-ax.plot(x,y*maxVal/maxY,color = "#ffa600")
+ax.plot(x,y,color = "#ffa600")
 
 ax.tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
