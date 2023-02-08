@@ -62,8 +62,8 @@ ax[0].plot(times[100:500]*1e6, data[block][100:500], marker = 'o', color = "#0d2
 ax[0].plot(times[100:500]*1e6, dataTwo[block][100:500], marker = 'o', color = "#ffa600")
 #ax[0].plot(x,y,color = "black", ls = ":")
 
-ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c", ls = "--")
-ax[1].plot(np.fft.fftshift(frequenciesTwo)*1e-6, np.fft.fftshift(powerSpectrumTwo)*1e-6, color = "#ffa600", ls = ":")
+ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c", ls = "--", label = "665 kHz")
+ax[1].plot(np.fft.fftshift(frequenciesTwo)*1e-6, np.fft.fftshift(powerSpectrumTwo)*1e-6, color = "#ffa600", ls = ":", label= "735 kHz")
 
 ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
@@ -90,9 +90,18 @@ ax[1].set_xticks(np.arange(-1.2,1.21,0.4))
 ax[1].set_ylim(-0.001,0.031)
 ax[1].set_yticks(np.arange(0,0.031,0.005))
 
+ax[1].legend(frameon = False, fontsize = textSize)
+
 
 plt.tight_layout()
 
 plt.savefig("../images/mixerTimeSeries.png")
 plt.savefig("../images/pdfs/mixerDSB.pdf")
 
+for i in range(len(frequencies)):
+    if powerSpectrum[i]*1e-6 > 0.015:
+        print(frequencies[i])
+
+for i in range(len(frequenciesTwo)):
+    if powerSpectrumTwo[i]*1e-6 > 0.015:
+        print(frequenciesTwo[i])

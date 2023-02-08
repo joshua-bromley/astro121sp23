@@ -46,7 +46,7 @@ filenameTwo = "../lab1data/150MHzLO_151MHzRF_maxSamp_SDR_10by2048_AliOff"
 
 dataTwo = np.loadtxt(filenameTwo, dtype = complex)
 dataTwo = np.delete(dataTwo, np.arange(1800,2048,1), axis = 1)
-sampleRate = 3e6
+sampleRate = 3.2e6
 timeStep = 1/sampleRate
 times = np.arange(0,(len(data[2]))*timeStep,timeStep)
 
@@ -60,8 +60,8 @@ ax[0].plot(times[100:200]*1e6, data[2][100:200], marker = 'o', color = "#0d265c"
 ax[0].plot(times[100:200]*1e6, dataTwo[2][100:200], marker = 'o', color = "#ffa600")
 #ax[0].plot(x,y,color = "black", ls = ":")
 
-ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c", ls = "--")
-ax[1].plot(np.fft.fftshift(frequenciesTwo)*1e-6, np.fft.fftshift(powerSpectrumTwo)*1e-6, color = "#ffa600", ls = ":")
+ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c", ls = "--", label = "149 MHz")
+ax[1].plot(np.fft.fftshift(frequenciesTwo)*1e-6, np.fft.fftshift(powerSpectrumTwo)*1e-6, color = "#ffa600", ls = ":", label = "151 MHz")
 
 ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
@@ -75,10 +75,31 @@ ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "minor", direct
 ax[0].set_xlabel("Time (ms)", fontsize = axesLabelSize)
 ax[0].set_ylabel("Voltage (Arbitrary)", fontsize = axesLabelSize)
 
+ax[0].set_xlim(30,65)
+ax[0].set_xticks(np.arange(30,65.1,5))
+ax[0].set_ylim(-0.32,0.32)
+ax[0].set_yticks(np.arange(-0.3,0.31,0.1))
+
 ax[1].set_xlabel("Frequency (MHz)", fontsize = axesLabelSize)
 ax[1].set_ylabel("Power (Arbitrary)", fontsize = axesLabelSize)
+
+ax[1].legend(frameon = False, fontsize = textSize)
+
+ax[1].set_xlim(-1.6,1.6)
+ax[1].set_xticks(np.arange(-1.6,1.61,0.4))
+ax[1].set_ylim(-0.005,0.14)
+ax[1].set_yticks(np.arange(0,0.141,0.02))
+
 
 plt.tight_layout()
 
 plt.savefig("../images/mixerSDRTimeSeries.png")
 plt.savefig("../images/pdfs/mixerSDRTimeSeries.pdf")
+
+for i in range(len(frequencies)):
+    if powerSpectrum[i]*1e-6 > 0.05:
+        print(frequencies[i])
+
+for i in range(len(frequenciesTwo)):
+    if powerSpectrumTwo[i]*1e-6 > 0.08:
+        print(frequenciesTwo[i])

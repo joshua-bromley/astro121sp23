@@ -84,6 +84,8 @@ ax[1].set_xticks(np.arange(-0.03,0.031,0.01))
 ax[1].set_ylim(-1500,1500)
 ax[1].set_yticks(np.arange(-1500,1501,500))
 
+ax[0].legend(frameon = False, fontsize = textSize)
+
 
 '''
 for axes in ax:
