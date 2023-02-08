@@ -30,34 +30,36 @@ axesLabelSize = 17
 tickLabelSize = 13
 textSize = 13
 
-filename = "./lab1data/150MHzLO_149MHzRF_maxSamp_SDR_10by2048_AliOff"
+block = 0
 
-data = np.loadtxt(filename, dtype = complex)
+filename = "../lab1data/zad1Mixer_700kHzLO_665kHzRF_DSB_10by2048"
+
+data = np.loadtxt(filename)
 data = np.delete(data, np.arange(1800,2048,1), axis = 1)
-sampleRate = 3.2e6
+sampleRate = 2.2e6
 timeStep = 1/sampleRate
-times = np.arange(0,(len(data[2]))*timeStep,timeStep)
+times = np.arange(0,(len(data[block]))*timeStep,timeStep)
 
-voltageSpectrum = np.abs(np.fft.fft(data[2]))
+voltageSpectrum = np.abs(np.fft.fft(data[block]))
 powerSpectrum = np.multiply(voltageSpectrum, voltageSpectrum)
-frequencies = np.fft.fftfreq(len(data[2]), timeStep)
+frequencies = np.fft.fftfreq(len(data[block]), timeStep)
 
-filenameTwo = "./lab1data/150MHzLO_151MHzRF_maxSamp_SDR_10by2048_AliOff"
+filenameTwo = "../lab1data/zad1Mixer_700kHzLO_735kHzRF_DSB_10by2048"
 
-dataTwo = np.loadtxt(filenameTwo, dtype = complex)
+dataTwo = np.loadtxt(filenameTwo)
 dataTwo = np.delete(dataTwo, np.arange(1800,2048,1), axis = 1)
-sampleRate = 3e6
+sampleRate = 2.2e6
 timeStep = 1/sampleRate
-times = np.arange(0,(len(data[2]))*timeStep,timeStep)
+times = np.arange(0,(len(data[block]))*timeStep,timeStep)
 
-voltageSpectrumTwo = np.abs(np.fft.fft(dataTwo[2]))
+voltageSpectrumTwo = np.abs(np.fft.fft(dataTwo[block]))
 powerSpectrumTwo = np.multiply(voltageSpectrumTwo, voltageSpectrumTwo)
-frequenciesTwo = np.fft.fftfreq(len(dataTwo[2]), timeStep)
+frequenciesTwo = np.fft.fftfreq(len(dataTwo[block]), timeStep)
 
-fig, ax = plt.subplots(1,2, figsize = (12,4))
+fig, ax = plt.subplots(2,1, figsize = (6,8))
 
-ax[0].plot(times[100:200]*1e6, data[2][100:200], marker = 'o', color = "#0d265c")
-ax[0].plot(times[100:200]*1e6, dataTwo[2][100:200], marker = 'o', color = "#ffa600")
+ax[0].plot(times[100:500]*1e6, data[block][100:500], marker = 'o', color = "#0d265c")
+ax[0].plot(times[100:500]*1e6, dataTwo[block][100:500], marker = 'o', color = "#ffa600")
 #ax[0].plot(x,y,color = "black", ls = ":")
 
 ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c", ls = "--")
@@ -75,9 +77,22 @@ ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "minor", direct
 ax[0].set_xlabel("Time (ms)", fontsize = axesLabelSize)
 ax[0].set_ylabel("Voltage (Arbitrary)", fontsize = axesLabelSize)
 
+ax[0].set_ylim(-0.6,0.6)
+ax[0].set_yticks(np.arange(-0.6,0.61,0.2))
+ax[0].set_xlim(40,160)
+ax[0].set_xticks(np.arange(40,161,20))
+
 ax[1].set_xlabel("Frequency (MHz)", fontsize = axesLabelSize)
 ax[1].set_ylabel("Power (Arbitrary)", fontsize = axesLabelSize)
 
+ax[1].set_xlim(-1.2,1.2)
+ax[1].set_xticks(np.arange(-1.2,1.21,0.4))
+ax[1].set_ylim(-0.001,0.031)
+ax[1].set_yticks(np.arange(0,0.031,0.005))
+
+
 plt.tight_layout()
 
-plt.savefig("./images/mixerSDRTimeSeries.png")
+plt.savefig("../images/mixerTimeSeries.png")
+plt.savefig("../images/pdfs/mixerDSB.pdf")
+

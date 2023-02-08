@@ -47,10 +47,10 @@ y = np.cos((x-34)*np.pi/0.6)
 
 fig, ax = plt.subplots(1,2, figsize = (12,4))
 
-ax[0].plot(times[100:150]*1e6, data[100:150], marker = 'o', color = "black")
+ax[0].plot(times[100:150]*1e6, data[100:150], marker = 'o', color = "#0d265c")
 #ax[0].plot(x,y,color = "black", ls = ":")
 
-ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "black")
+ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c")
 
 ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax[0].tick_params(axis = 'x', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)

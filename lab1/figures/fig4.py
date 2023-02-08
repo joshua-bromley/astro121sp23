@@ -124,3 +124,7 @@ plt.tight_layout()
 plt.savefig("../images/noisePlot.png")
 plt.savefig("../images/pdfs/noisePlot.pdf")
 
+print(paramsOne[0], np.sqrt(np.diag(paramsOne[1])))
+print(paramsEight[0], np.sqrt(np.diag(paramsEight[1])))
+print(paramsAll[0], np.sqrt(np.diag(paramsAll[1])))
+

@@ -36,11 +36,11 @@ data = np.loadtxt(filename)
 data = np.delete(data, np.arange(1800,2048,1), axis = 1)
 sampleRate = 3e6
 timeStep = 1/sampleRate
-times = np.arange(0,(len(data[2]))*timeStep,timeStep)
+times = np.arange(0,(len(data[0]))*timeStep,timeStep)
 
-voltageSpectrum = np.abs(np.fft.fft(data[2]))
+voltageSpectrum = np.abs(np.fft.fft(data[0]))
 powerSpectrum = np.multiply(voltageSpectrum, voltageSpectrum)
-frequencies = np.fft.fftfreq(len(data[2]), timeStep)
+frequencies = np.fft.fftfreq(len(data[0]), timeStep)
 
 filenameTwo = "./lab1data/zfm15Mixer_150MHzLO_157MHzRF_90shift_SSB_10by2048"
 
@@ -48,16 +48,16 @@ dataTwo = np.loadtxt(filenameTwo)
 dataTwo = np.delete(dataTwo, np.arange(1800,2048,1), axis = 1)
 sampleRate = 3e6
 timeStep = 1/sampleRate
-times = np.arange(0,(len(data[2]))*timeStep,timeStep)
+times = np.arange(0,(len(data[0]))*timeStep,timeStep)
 
-voltageSpectrumTwo = np.abs(np.fft.fft(dataTwo[2]))
+voltageSpectrumTwo = np.abs(np.fft.fft(dataTwo[0]))
 powerSpectrumTwo = np.multiply(voltageSpectrumTwo, voltageSpectrumTwo)
-frequenciesTwo = np.fft.fftfreq(len(dataTwo[2]), timeStep)
+frequenciesTwo = np.fft.fftfreq(len(dataTwo[0]), timeStep)
 
 fig, ax = plt.subplots(1,2, figsize = (12,4))
 
-ax[0].plot(times[100:200]*1e6, data[2][100:200], marker = 'o', color = "#0d265c")
-ax[0].plot(times[100:200]*1e6, dataTwo[2][100:200], marker = 'o', color = "#ffa600")
+ax[0].plot(times[100:200]*1e6, data[0][100:200], marker = 'o', color = "#0d265c")
+ax[0].plot(times[100:200]*1e6, dataTwo[0][100:200], marker = 'o', color = "#ffa600")
 #ax[0].plot(x,y,color = "black", ls = ":")
 
 ax[1].plot(np.fft.fftshift(frequencies)*1e-6, np.fft.fftshift(powerSpectrum)*1e-6, color = "#0d265c", ls = "--")
