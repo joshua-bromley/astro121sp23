@@ -85,7 +85,7 @@ shiftedFreqs = np.fft.fftshift(frequencies)*1e-6
 
 ax[2].plot(shiftedFreqs, np.fft.fftshift(onePowerSpectrum), color = "#0d265c", label = "1 Blocks")
 ax[2].plot(shiftedFreqs, np.fft.fftshift(eightPowerSpectrum),color = "#c4346b", alpha = 0.8, label = "8 Blocks")
-ax[2].plot(shiftedFreqs, np.fft.fftshift(totalPowerSpectrum),color = "#ffa600", alpha = 0.7, label = "All Blocks")
+ax[2].plot(shiftedFreqs, np.fft.fftshift(totalPowerSpectrum),color = "#ffa600", alpha = 0.7, label = "200 Blocks")
 
 ax[0].set_xlabel("Voltage (Arbitrary)", fontsize = axesLabelSize)
 ax[0].set_ylabel("Magnitude", fontsize = axesLabelSize)
