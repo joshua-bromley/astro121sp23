@@ -31,9 +31,9 @@ axesLabelSize = 17
 tickLabelSize = 13
 textSize = 13
 
-filenameCal = "./lab2data/hornHuman_1419MHzLO_signalRF_maxSamp"
-filenameOn = "./lab2data/hornCold_1419MHzLO_signalRF_maxSamp"
-filenameOff = "./lab2data/hornTest_1409MHzLO_1410MHzRF_maxSamp"
+filenameCal = "./lab2data/hornHUMAN_1420_906MHzLO_signalRF_maxSamp.gz"
+filenameOn = "./lab2data/hornCOLD_1420_906MHzLO_signalRF_maxSamp.gz"
+filenameOff = "./lab2data/hornCOLD_1419_906MHzLO_signalRF_maxSamp.gz"
 
 dataOn = np.loadtxt(filenameOn, dtype = complex)
 dataOff = np.loadtxt(filenameOff, dtype = complex)
@@ -55,13 +55,13 @@ avgPowSpecCal = np.mean(powSpecCal, axis = 0)
 
 deltaT = 10
 
-gain = deltaT*np.divide(avgPowSpecOn,(avgPowSpecCal-avgPowSpecOn))
+gain = deltaT*np.sum(avgPowSpecOn)/np.sum(avgPowSpecCal-avgPowSpecOn)
 
 normPowerSpec = np.divide(avgPowSpecOn,avgPowSpecOff)
 
-gainPowerSpec = np.multiply(gain, normPowerSpec)
+gainPowerSpec = gain*normPowerSpec
 
-print(np.mean(gain))
+print(gain)
 
 
 freqs = np.fft.fftfreq(len(avgPowSpecOn), timeStep)
@@ -70,11 +70,15 @@ velocities = -(freqs)/1420e6
 fig, ax = plt.subplots(2,1, figsize = (6,8))
 
 ax[0].plot(freqs*1e-6, gainPowerSpec)
-ax[1].plot(velocities*1e2, gainPowerSpec)
+ax[1].plot(freqs*1e-6, avgPowSpecOn)
+ax[1].plot(freqs*1e-6, avgPowSpecCal)
+
 
 ax[0].set_xlabel("Frequency MHz", fontsize = axesLabelSize)
-ax[1].set_xlabel("Target Velocity (percent of c)", fontsize = axesLabelSize)
+ax[1].set_xlabel("Frequency MHz", fontsize = axesLabelSize)
 
+ax[0].set_ylabel("Temperature K", fontsize = axesLabelSize)
+ax[1].set_ylabel("Temperature K", fontsize = axesLabelSize)
 
 
 plt.savefig("./images/avgPowerSpectrum.png")

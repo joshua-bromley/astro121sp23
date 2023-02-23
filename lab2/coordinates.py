@@ -37,4 +37,4 @@ jd =  2459992.3130
 
 v = ugradio.doppler.get_projected_velocity(ra, dec, jd)
 
-print(v)
+print(v.value/3e8)
