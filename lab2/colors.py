@@ -1,0 +1,6 @@
+blue = "#0d265c"
+indigo = "#444e86"
+purple = "#955196"
+pink = "#dd5182"
+orange = "ff6e54"
+yellow = "#ffa600"

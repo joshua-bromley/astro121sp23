@@ -32,47 +32,54 @@ axesLabelSize = 17
 tickLabelSize = 13
 textSize = 13
 
-filenamesCold = [["./lab2data/hornCOLD_1419_906MHzLO_signalRF_maxSamp.gz","./lab2data/hornCOLD_1419_906MHzLO_signalRF_maxSamp2.gz"],["./lab2data/hornCOLD_1420_906MHzLO_signalRF_maxSamp.gz","./lab2data/hornCOLD_1420_906MHzLO_signalRF_maxSamp2.gz","./lab2data/hornCOLD_1420_906MHzLO_signalRF_maxSamp3.gz"]]
-filenamesHot = [["./lab2data/hornHUMAN_1419_906MHzLO_signalRF_maxSamp.gz","./lab2data/hornHUMAN_1419_906MHzLO_signalRF_maxSamp2.gz"],["./lab2data/hornHUMAN_1420_906MHzLO_signalRF_maxSamp.gz","./lab2data/hornHUMAN_1420_906MHzLO_signalRF_maxSamp2.gz","./lab2data/hornHUMAN_1420_906MHzLO_signalRF_maxSamp3.gz"]]
 
-gain = functions.calcGain(filenamesCold, filenamesHot)
-print(gain)
 
-filenamesLow = ["./lab2data/cassi_1419_906MHzLO_signalRF_maxSamp.gz","./lab2data/cassi_1419_906MHzLO_signalRF_maxSamp2.gz"]
-filenamesHigh = ["./lab2data/cassi_1420_906MHzLO_signalRF_maxSamp.gz","./lab2data/cassi_1420_906MHzLO_signalRF_maxSamp2.gz"]
+filenamesLow = ["./lab2data/cassie_1419_906MHzLO_signalRF_maxSamp.gz","./lab2data/cassie_1419_906MHzLO_signalRF_maxSamp2.gz"]
+filenamesHigh = ["./lab2data/cassie_1420_906MHzLO_signalRF_maxSamp.gz","./lab2data/cassie_1420_906MHzLO_signalRF_maxSamp2.gz"]
 
 powSpecLow = functions.fileToPowerSpec(filenamesLow)
 powSpecHigh = functions.fileToPowerSpec(filenamesHigh)
 
-powSpecHigh = np.flip(powSpecHigh)
 
 for i in range(len(powSpecLow)-1):
-    if powSpecLow[i] > 20.5:
+    if powSpecLow[i] > powSpecLow[i+1]+1:
         powSpecLow[i] = powSpecLow[i+1]
 
 for i in range(len(powSpecHigh)-1):
-    if powSpecHigh[i] > 20.5:
+    if powSpecHigh[i] > powSpecHigh[i+1]+1:
         powSpecHigh[i] = powSpecHigh[i+1]
 
 sampleRate = 3.2e6
 timeStep = 1/sampleRate
 
-powSpecLow = powSpecLow*gain
-powSpecHigh = powSpecHigh*gain
+powSpecLow = powSpecLow
+powSpecHigh = powSpecHigh
 
 avgPowSpec = np.mean((powSpecLow,powSpecHigh), axis = 0)
 
-freqs = np.fft.fftfreq(len(powSpecLow), timeStep) + 1419.906e6
+freqsLow = np.fft.fftfreq(len(powSpecLow), timeStep) + 1419.906e6
+freqsHigh = np.fft.fftfreq(len(powSpecLow), timeStep) + 1420.906e6
 
 nu = 1420.40575e6
-ra = 0.7457186706248459 
-dec =37.873199
-jd =  2459962.6325228396
+ra = 6.45088448
+dec = 62.72554931
+jd =  2459998.633030077
 v = ugradio.doppler.get_projected_velocity(ra, dec, jd).value/3e8
 
-velocities = v-((freqs-nu)/nu)
+velocitiesLow = v-((freqsLow- nu)/nu)
+velocitiesHigh = v-((freqsHigh -nu)/nu)
 
+np.savetxt("./lab2data/LO1419.gz",[velocitiesLow, powSpecLow])
+np.savetxt("./lab2data/LO1420.gz",[velocitiesHigh, powSpecHigh])
 
+fig, ax = plt.subplots(2,1, figsize = (6,8))
+
+ax[0].plot(velocitiesLow, powSpecLow)
+ax[1].plot(velocitiesHigh, powSpecHigh)
+
+plt.savefig("./images/HLineVelo.png")
+
+'''
 powSpecFlat = np.divide(powSpecLow,powSpecHigh)
 
 fig, ax = plt.subplots(2,1, figsize = (6,8))
@@ -98,6 +105,7 @@ clippedPowSpec = avgPowSpec[200:450]
 clippedPowSpecCal = np.flip(avgPowSpec[-450:-200])
 
 np.savetxt("./lab2data/signal.gz", [clippedVelocities, clippedPowSpec, clippedPowSpecCal])
+'''
 
 
 
