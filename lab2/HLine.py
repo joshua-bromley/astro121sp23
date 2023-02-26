@@ -69,8 +69,8 @@ v = ugradio.doppler.get_projected_velocity(ra, dec, jd).value/3e8
 velocitiesLow = v-((freqsLow- nu)/nu)
 velocitiesHigh = v-((freqsHigh -nu)/nu)
 
-np.savetxt("./lab2data/LO1419.gz",[velocitiesLow, powSpecLow])
-np.savetxt("./lab2data/LO1420.gz",[velocitiesHigh, powSpecHigh])
+np.savetxt("./lab2data/LO1419.gz",[velocitiesLow, powSpecLow, freqsLow])
+np.savetxt("./lab2data/LO1420.gz",[velocitiesHigh, powSpecHigh, freqsHigh])
 
 fig, ax = plt.subplots(2,1, figsize = (6,8))
 
@@ -78,6 +78,8 @@ ax[0].plot(velocitiesLow, powSpecLow)
 ax[1].plot(velocitiesHigh, powSpecHigh)
 
 plt.savefig("./images/HLineVelo.png")
+
+print(v)
 
 '''
 powSpecFlat = np.divide(powSpecLow,powSpecHigh)

@@ -92,7 +92,7 @@ ax[1].set_xticks(xTicksHigh)
 plt.tight_layout()
 
 plt.savefig("./images/fig2.png")
-plt.savefig("./images/fig2.pdf")
+plt.savefig("./images/pdfs/fig2.pdf")
 
 #gain = functions.calcGain(filenamesCold, filenamesHot)
 #print(gain)
