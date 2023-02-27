@@ -54,12 +54,12 @@ def polyModel(params,x):
 def gaussModel(params,x):
     return (params[2]/(params[1]*np.sqrt(2*np.pi)))*np.exp(-0.5*((x-params[0])/params[1])**2)
 
-def doubleGaussModel(params, x):
-     return (params[2]/(params[1]*np.sqrt(2*np.pi)))*np.exp(-0.5*((x-params[0])/params[1])**2) + (params[5]/(params[4]*np.sqrt(2*np.pi)))*np.exp(-0.5*((x-params[3])/params[4])**2) 
+def doubleGaussModel(params, x): 
+     return params[2]*np.exp(-0.5*((x-params[0])/params[1])**2) + params[5]*np.exp(-0.5*((x-params[3])/params[4])**2) 
 
 def logLikelihood(theta, x, y, err, model):
     predicted = model(theta,x)
-    error = [((y[i] - predicted[i])**2 / (2*err[i]**2)) for i in range(len(y))]
+    error = [((y[i] - predicted[i])**2 / (err[i]**2)) for i in range(len(y))]
     lnl = -np.sum(error)
     return lnl
 

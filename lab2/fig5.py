@@ -37,14 +37,13 @@ data = np.loadtxt(filename)
 velocities = data[0]
 signal = data[1]
 
-gaussParams = [-3.50913783e-5,  3.21491712e-5,  3.62617252e-3, -1.75673198e-4,
-  6.25805193e-5,  4.49589864e-3]
+gaussParams = [-3.50843837e-05,  3.21621661e-05,  4.49978047e+01, -1.75699364e-04, 6.25757372e-05,  2.86485907e+01]
 
 fig, ax = plt.subplots(1,1, figsize = (6,4))
 ax.plot(velocities*100, signal, color = colors.blue)
 ax.plot(velocities*100, functions.doubleGaussModel(gaussParams, velocities), color = colors.yellow, lw = 2)
 
-ax.set_xlabel("Velocity (0.1c)", fontsize = axesLabelSize)
+ax.set_xlabel("Velocity (0.01c)", fontsize = axesLabelSize)
 ax.set_ylabel("Relative Temperature (K)", fontsize = axesLabelSize)
 
 ax.tick_params(axis = 'x', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)

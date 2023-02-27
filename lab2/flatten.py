@@ -20,7 +20,7 @@ signalLowFlat = np.divide(signalLow, calLow)*gain
 
 velocitiesLowFit = np.concatenate((velocitiesLow[0:120],velocitiesLow[540:-1]))
 signalLowFit = np.concatenate((signalLowFlat[0:120],signalLowFlat[540:-1]))
-err = np.ones(len(signalLowFit))
+err = 3.72902*np.ones(len(signalLowFit))
 
 pos = [5e6,-0.0005,140]*np.ones([16,3]) + [5e6,-0.0005,140]*((np.random.random([16,3])-0.5)/5)
 
@@ -35,12 +35,17 @@ logProb = sampler.get_log_prob()
 redChiSq = np.mean(-logProb[-1]/(631))
 print("Chi Sq Low", redChiSq)
 
+
+
 lowParams = np.ones(ndim)
 for i in range(ndim):
     lowParams[i] = np.percentile(flatSamples[:,i],50)
 
 lowFlat = signalLowFlat - functions.polyModel(lowParams, velocitiesLow)
 
+residuals = signalLowFit - functions.polyModel(lowParams, velocitiesLowFit)
+stdDev = np.std(residuals)
+print(stdDev)
 
 signalHigh = dataHigh[1][1024:]
 calHigh = np.flip(dataHigh[1][0:1024])
@@ -51,7 +56,7 @@ velocitiesHigh = dataHigh[0][1024:]
 
 velocitiesHighFit = np.concatenate((velocitiesHigh[0:540], velocitiesHigh[-75:]))
 signalHighFit = np.concatenate((signalHighFlat[0:540],signalHighFlat[-75:]))
-err = np.ones(len(signalHighFit))
+err = 3.46*np.ones(len(signalHighFit))
 
 
 pos = [5e6,0.0005,140]*np.ones([16,3]) + [5e6,0.0005,140]*((np.random.random([16,3])-0.5)/5)
@@ -71,6 +76,10 @@ for i in range(ndim):
     highParams[i] = np.percentile(flatSamples[:,i],50)
 
 highFlat = signalHighFlat - functions.polyModel(highParams, velocitiesHigh) 
+
+residuals = signalHighFit - functions.polyModel(highParams, velocitiesHighFit)
+stdDev = np.std(residuals)
+print(stdDev)
 
 
 fig, ax = plt.subplots(2,1, figsize = (6,8))

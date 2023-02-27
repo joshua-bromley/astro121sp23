@@ -38,9 +38,9 @@ filename = "./lab2data/flattenedSignal.gz"
 data = np.loadtxt(filename)
 velocities = data[0]
 signal = data[1]
-err = np.ones(len(signal))*2
+err = np.ones(len(signal))*2.5563
 
-initialGuess = [-0.00003,0.000035, 0.004, -0.00019, 0.00005, 0.004]
+initialGuess = [-0.00003,0.000035, 50, -0.00019, 0.00005, 50]
 
 pos = initialGuess*np.ones([16,6]) + initialGuess*((np.random.random([16,6])-0.5)/50)
 
@@ -57,6 +57,10 @@ gaussParams = np.ones(ndim)
 for i in range(ndim):
     gaussParams[i] = np.percentile(flatSamples[:,i],50)
 
+residuals = signal - functions.doubleGaussModel(gaussParams, velocities)
+stdDev = np.std(residuals)
+print(stdDev)
+
 for i in range(ndim):
     mcmc = np.percentile(flatSamples[:,i],[16,50,84])
     q = np.diff(mcmc)
@@ -72,3 +76,4 @@ plt.savefig("./images/doubleGaussFit.png")
 fig1 = corner.corner(flatSamples, labels = ["$\mu_1$", "$\sigma_1$", "$A_1$", "$\mu_2$", "$\sigma_2$", "$A_2$"])
 plt.savefig("./images/doubleGaussCorner.png")
 print(gaussParams)
+print(redChiSq)
