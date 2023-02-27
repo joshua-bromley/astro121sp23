@@ -20,7 +20,7 @@ signalLowFlat = np.divide(signalLow, calLow)*gain
 
 velocitiesLowFit = np.concatenate((velocitiesLow[0:120],velocitiesLow[540:-1]))
 signalLowFit = np.concatenate((signalLowFlat[0:120],signalLowFlat[540:-1]))
-err =np.ones(len(signalLowFit))
+err = np.ones(len(signalLowFit))
 
 pos = [5e6,-0.0005,140]*np.ones([16,3]) + [5e6,-0.0005,140]*((np.random.random([16,3])-0.5)/5)
 
@@ -30,6 +30,10 @@ nwalkers, ndim = pos.shape
 sampler = emcee.EnsembleSampler(nwalkers, ndim, functions.logProbability, args = (velocitiesLowFit, signalLowFit, err, functions.polyModel))
 sampler.run_mcmc(pos,5000, progress = True)
 flatSamples = sampler.get_chain(discard = 100, thin = 15, flat = True)
+logProb = sampler.get_log_prob()
+
+redChiSq = np.mean(-logProb[-1]/(631))
+print("Chi Sq Low", redChiSq)
 
 lowParams = np.ones(ndim)
 for i in range(ndim):
@@ -57,6 +61,10 @@ nwalkers, ndim = pos.shape
 sampler = emcee.EnsembleSampler(nwalkers, ndim, functions.logProbability, args = (velocitiesHighFit, signalHighFit, err, functions.polyModel))
 sampler.run_mcmc(pos,5000, progress = True)
 flatSamples = sampler.get_chain(discard = 100, thin = 15, flat = True)
+logProb = sampler.get_log_prob()
+
+redChiSq = np.mean(-logProb[-1]/(612))
+print("Chi Sq High", redChiSq)
 
 highParams = np.ones(ndim)
 for i in range(ndim):
@@ -77,14 +85,14 @@ print(lowParams, highParams)
 
 index = np.where(np.abs(velocitiesHigh -0.000162776529940715) < 0.0000001)
 
-print(index)
+
 
 
 avgSignal = np.mean((lowFlat[120:565], highFlat[504:-75]), axis = 0)
 
 np.savetxt("./lab2data/flattenedSignal.gz", (velocitiesLow[120:565], avgSignal))
 
-print(lowParams, highParams)
+print(gain)
 
 
 

@@ -50,10 +50,18 @@ nwalkers, ndim = pos.shape
 sampler = emcee.EnsembleSampler(nwalkers, ndim, functions.logProbability, args = (velocities, signal, err, functions.doubleGaussModel))
 sampler.run_mcmc(pos,10000, progress = True)
 flatSamples = sampler.get_chain(discard = 500, thin = 5, flat = True)
+logProb = sampler.get_log_prob()
+redChiSq = np.mean(-logProb[-1]/(439))
 
 gaussParams = np.ones(ndim)
 for i in range(ndim):
     gaussParams[i] = np.percentile(flatSamples[:,i],50)
+
+for i in range(ndim):
+    mcmc = np.percentile(flatSamples[:,i],[16,50,84])
+    q = np.diff(mcmc)
+    stdDev = np.mean(q)
+    print(mcmc[1], stdDev)
 
 fig, ax = plt.subplots(1,1, figsize = (6,4))
 ax.plot(velocities, signal)
