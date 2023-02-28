@@ -75,5 +75,23 @@ plt.savefig("./images/doubleGaussFit.png")
 
 fig1 = corner.corner(flatSamples, labels = ["$\mu_1$", "$\sigma_1$", "$A_1$", "$\mu_2$", "$\sigma_2$", "$A_2$"])
 plt.savefig("./images/doubleGaussCorner.png")
+plt.savefig("./images/pdfs/gaussCOrner.pdf")
 print(gaussParams)
 print(redChiSq)
+
+fig2, ax2 = plt.subplots(6, figsize = (12,12), sharex = True)
+samples = sampler.get_chain()
+labels = ["$\mu_1$", "$\sigma_1$", "$A_1$", "$\mu_2$", "$\sigma_2$", "$A_2$"]
+for i in range(ndim):
+    axes = ax2[i]
+    axes.plot(samples[:,:,i], "k", alpha = 0.3)
+    axes.set_xlim(0,len(samples))
+    axes.set_ylabel(labels[i], fontsize = 10)
+    axes.yaxis.set_label_coords(-0.1,0.5)
+
+ax2[-1].set_xlabel("Step Number",fontsize = 10)
+plt.tight_layout()
+plt.savefig("./images/samplerPaths.png")
+plt.savefig("./images/pdfs/samplerPaths.pdf")
+
+
