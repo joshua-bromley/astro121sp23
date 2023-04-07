@@ -70,7 +70,10 @@ def getFringeFrequencies(data, times, numChunks):
         transformedData = np.abs(np.fft.fft(data[i*chunkLength:(i+1)*chunkLength]))
         maxIndex = np.argmax(transformedData[5:])+5
         frequencies = np.fft.fftfreq(len(transformedData), timeStep)
-        fringeFrequencies.append(frequencies[maxIndex])
+        if maxIndex == 5:
+            fringeFrequencies.append(None)
+        else:
+            fringeFrequencies.append(frequencies[maxIndex])
         fringeTimes.append(np.mean(times[i*chunkLength:(i+1)*chunkLength]))
     
     hourAngle = uTimeToHrAngle(fringeTimes)
@@ -104,7 +107,7 @@ def uTimeToHrAngle(times):
     return hourAngle
 
 
-def bruteForceFit(x, y, err, model, params):
+def bruteForceFit(x, y, err, model, params, grid = False):
     """Performs a brute force fit for the given model over all the params. Selects the best fit by minimizing the chi squared
 
     Parameters
@@ -125,8 +128,13 @@ def bruteForceFit(x, y, err, model, params):
     for i in params:
         chiSqArr.append(chiSq(x,y,err,model,i))
     minIndex = np.argmin(chiSqArr)
+
+    chiSqGrid = np.reshape(chiSqArr, (500,500))
     
-    return params[minIndex]
+    if grid == True:
+        return params[minIndex], chiSqGrid
+    else:
+        return params[minIndex]
 
 def mcmcFit(x, y, err, model, params, nwalkers):
     """"Performs an mcmc fit for the given model over all params
@@ -153,7 +161,7 @@ def mcmcFit(x, y, err, model, params, nwalkers):
     flatSamples = sampler.get_chain(discard = 100, thin = 15, flat = True)
     results = []
     for i in range(ndim):
-        mcmc = np.percentile(flatSamples[:,i],[16,50,84])
+        mcmc = np.percentile(flatSamples[:,i],[2.5,50,97.5])
         q = np.diff(mcmc)
         stdDev = np.mean(q)
         results.append((mcmc[1], stdDev))
@@ -261,6 +269,37 @@ def readMoonData(filename, freqMin, freqMax):
     spectralFrequencies = np.fft.fftfreq(1024, 1/500e6)[freqMin:freqMax] + 10.29e9 
 
     return data, times, spectralFrequencies
+
+def getFringeFrequenciesTwo(data, times, numChunks):
+    """Returns the fringe frequency vs time for a single frequency channel data stream.
+
+    Parameters
+    ---------
+    data: list(complex), power over time for a single frequency channel
+    times: list(double), times, in unix time, corresponding to the data points in data
+    numChuncks: int, number of blocks to break the data into
+
+    Returns
+    ---------
+    fringeFrequencies: list(double), list of fringe frequencies, in Hz
+    hourAngle: list(double), list of times, in hour angle, corresponding to the fringe frequencies
+    """
+    numCorrelations = len(data)
+    chunkLength = int(numCorrelations/numChunks)
+    timeStep = np.mean(np.diff(times))
+
+    fringeFrequencies = []
+    fringeTimes = []
+
+    for i in range(numChunks):
+        transformedData = np.abs(np.fft.fft(data[i*chunkLength:(i+1)*chunkLength]))
+        fringeFrequencies.append(np.fft.fftshift(transformedData))
+        fringeTimes.append(np.mean(times[i*chunkLength:(i+1)*chunkLength]))
+    
+    hourAngle = uTimeToHrAngle(fringeTimes)
+    
+
+    return fringeFrequencies, hourAngle
 
 
 

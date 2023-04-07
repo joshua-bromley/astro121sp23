@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import interferometry as intf
+import colors
 
 rcParams["axes.linewidth"] = 2
 
@@ -34,29 +35,28 @@ textSize = 13
 filepath = "./lab3data/12hrSun_new/dat{0}.pkl"
 data, times, frequencies, _ = intf.readData(filepath, 11862, 500, 800)
 
-wavelengths = 3e8/frequencies
+hourAngle = intf.uTimeToHrAngle(times)
 
-timeStep = np.mean(np.diff(times))
-frequencies = np.fft.fftshift(np.fft.fftfreq(1024, timeStep))
+frequencies = frequencies*1e-9
 
-fringePattern, hourAngle = intf.getFringeFrequenciesTwo(np.transpose(data)[150], times, 32)
+fringePattern = np.transpose(data)[150][9000:]
 
+hourAngle = hourAngle[9000:]
 
-fig, ax = plt.subplots(1,1, figsize = (6,6))
-image = ax.imshow(fringePattern, cmap = "cividis", aspect = "auto", extent = [frequencies[0], frequencies[-1], hourAngle[0],hourAngle[-1]])
-cbar = fig.colorbar(image)
+fig, ax = plt.subplots(1,1, figsize = (12,4))
+ax.plot(hourAngle, np.real(fringePattern), color = colors.berkeley_blue, alpha = 0.8)
+ax.plot(hourAngle, np.imag(fringePattern), color = colors.lap_lane, alpha = 0.8)
+ax.plot(hourAngle, np.abs(fringePattern), color = colors.california_gold, alpha = 0.8)
 
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
-ax.set_xlabel("Frequency (Hz)", fontsize = axesLabelSize)
-ax.set_ylabel("Hour Angle (Radians)", fontsize = axesLabelSize)
+ax.set_ylabel("Power (Arbitrary)", fontsize = axesLabelSize)
+ax.set_xlabel("Hour Angle (Radians)", fontsize = axesLabelSize)
 
-cbar.set_label("Power (Arbitrary)", fontsize = axesLabelSize)
 
 plt.tight_layout()
-plt.savefig("./figures/pngs/fig2.png")
-plt.savefig("./figures/pdfs/fig2.pdf")
-
+plt.savefig("./figures/pngs/fig5.png")
+plt.savefig("./figures/pdfs/fig5.pdf")

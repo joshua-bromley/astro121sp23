@@ -53,7 +53,6 @@ wavelengths  = 3e8/frequencies
 fringeSpeed = []
 for i in range(len(fringeFreqs)):
     fringeSpeed.append(np.multiply(fringeFreqs[i],wavelengths[i]))
-print(wavelengths[0])
 
 
 avgFringeSpeed = np.mean(fringeSpeed, axis = 0)
@@ -63,40 +62,51 @@ for i in range(len(fringeSpeed)):
             fringeSpeed[i][j] = avgFringeSpeed[j]
 
 avgFringeSpeed = np.mean(fringeSpeed, axis = 0)
-err = np.std(fringeSpeed, axis = 0)
+#err = np.std(fringeSpeed, axis = 0)
 #err = err/np.sqrt(300)
+err = err*np.mean(wavelengths)
 
+aParams = np.linspace(0.0008,0.0013,500)
+bParams = np.linspace(0.00001,0.0003,500)
 
-aParams = np.linspace(0.0006,0.0012,500)
-bParams = np.linspace(0.00001,0.0006,500)
 params = []
 
 for a in aParams:
     for b in bParams:
         params.append((a,b))
 
-optA, optB = intf.bruteForceFit(hourAngle, avgFringeSpeed, err, localFringeFrequency, params)
+opt, chiSqArr = intf.bruteForceFit(hourAngle, avgFringeSpeed, err, localFringeFrequency, params, grid = True)
+print(err[0])
+
 
 earthRotRate = 2*np.pi/(86164.0905)
 _, dec = ug.coord.sunpos(ug.timing.julian_date(times[0]))
 dec = np.deg2rad(dec)
 
-print(optA,optB)
+minEW = (0.0008)/(np.cos(dec)*earthRotRate)
+maxEW = (0.0013)/(np.cos(dec)*earthRotRate)
+minNS =(0.00001)/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
+maxNS = (0.0003)/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
 
+optEW = (opt[0])/(np.cos(dec)*earthRotRate)
+optNS = (opt[1])/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
 
+fig, ax = plt.subplots(1,1, figsize = (6,6))
+image = ax.imshow(chiSqArr, cmap = "terrain_r", aspect = "auto", extent = [minNS, maxNS, maxEW, minEW])
+cbar = fig.colorbar(image)
+print(opt[0],opt[1])
+print(optEW, optNS)
 
-mcmcA, mcmcB = intf.mcmcFit(hourAngle, avgFringeSpeed, err, localFringeFrequency, [optA,optB], 32)
+ax.tick_params(axis = 'x', bottom = True, top = False, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'x', bottom = True, top = False, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
+ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
-baselineEW = (optA)/(np.cos(dec)*earthRotRate)
-baselineNS = (optB)/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
-ewErr = (mcmcA[1])/(np.cos(dec)*earthRotRate)
-nsErr = (mcmcB[1])/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
-print(baselineEW, ewErr)
-print(baselineNS, nsErr)
+ax.set_ylabel("Baseline East-West (m)", fontsize = axesLabelSize)
+ax.set_xlabel("Baseline North-South (m)", fontsize = axesLabelSize)
 
-fig, ax = plt.subplots(1,1)
-ax.errorbar(hourAngle, avgFringeSpeed, yerr = err, marker = ".", ls = "", color = colors.berkeley_blue)
-#for i in range(300):
-#    ax.plot(hourAngle, fringeSpeed[i], ls = "", marker = ".")
-ax.plot(hourAngle, localFringeFrequency(hourAngle, [mcmcA[0], mcmcB[0]]), color = colors.california_gold)
-plt.savefig("./images/fringeFrequencies.png")
+cbar.set_label("Chi Squared", fontsize = axesLabelSize)
+
+plt.tight_layout()
+plt.savefig("./figures/pngs/fig3.png")
+plt.savefig("./figures/pdfs/fig3.pdf")
