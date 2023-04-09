@@ -87,8 +87,8 @@ print(optA,optB)
 
 mcmcA, mcmcB = intf.mcmcFit(hourAngle, avgFringeSpeed, err, localFringeFrequency, [optA,optB], 32)
 
-baselineEW = (optA)/(np.cos(dec)*earthRotRate)
-baselineNS = (optB)/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
+baselineEW = (mcmcA[0])/(np.cos(dec)*earthRotRate)
+baselineNS = (mcmcB[0])/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
 ewErr = (mcmcA[1])/(np.cos(dec)*earthRotRate)
 nsErr = (mcmcB[1])/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
 print(baselineEW, ewErr)
