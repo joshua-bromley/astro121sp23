@@ -124,12 +124,13 @@ def bruteForceFit(x, y, err, model, params, grid = False):
     -------
     params (tuple): parameters with the lowest least squares for the model
     """
+    sideLength = int(np.sqrt(len(params)))
     chiSqArr = []
     for i in params:
         chiSqArr.append(chiSq(x,y,err,model,i))
     minIndex = np.argmin(chiSqArr)
 
-    chiSqGrid = np.reshape(chiSqArr, (500,500))
+    chiSqGrid = np.reshape(chiSqArr, (sideLength,sideLength))
     
     if grid == True:
         return params[minIndex], chiSqGrid
@@ -165,6 +166,12 @@ def mcmcFit(x, y, err, model, params, nwalkers):
         q = np.diff(mcmc)
         stdDev = np.mean(q)
         results.append((mcmc[1], stdDev))
+    
+    logProb = sampler.get_log_prob(discard = 100, thin = 15, flat = True)
+    chiSquared = -np.mean(logProb)
+    autoCorrTime = sampler.get_autocorr_time()
+    results.append(chiSquared)
+    results.append(autoCorrTime)
     
     return results
     

@@ -51,7 +51,7 @@ ax.tick_params(axis = 'x', bottom = True, top = False, which = "minor", directio
 ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
-ax.set_xlabel("Frequency (Hz)", fontsize = axesLabelSize)
+ax.set_xlabel("Fringe Frequency (Hz)", fontsize = axesLabelSize)
 ax.set_ylabel("Hour Angle (Radians)", fontsize = axesLabelSize)
 
 cbar.set_label("Power (Arbitrary)", fontsize = axesLabelSize)

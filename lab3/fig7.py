@@ -55,19 +55,14 @@ times = times[0:-1]
 
 hourAngle = intf.uTimeToHrAngle(times)
 
-baselineEW = 15.23
-wavelength = 3e8/frequencies[150]
+baselineEW = 14.91973
+wavelength = 3e8/frequencies[100]
 _, dec = ug.coord.sunpos(ug.timing.julian_date(times[0]))
 dec = np.deg2rad(dec)
 u = (baselineEW/wavelength)*np.cos(hourAngle)*np.cos(dec)
 
 envelope = envelope[-2000:]
 u = u[-2000:]
-
-print(ug.timing.local_time(times[0]),ug.timing.local_time(times[-1]))
-print(np.mean(np.diff(times)))
-print(frequencies[0],frequencies[150],frequencies[-1])
-print(len(u[1300:-1]))
 
 minOneIdx = np.argmin(envelope)
 minOne = envelope[minOneIdx]
@@ -81,45 +76,30 @@ for i in range(len(envelope)):
 
 
 
-rParams = np.linspace(1e-3, 1e-2, 50)
-tParams = np.linspace(5,50,50)
+rParams = np.linspace(1e-3, 1e-2, 100)
+tParams = np.linspace(5,50,100)
 params = []
 for r in rParams:
     for t in tParams:
         params.append([r,t])
 
-optR, optT = intf.bruteForceFit(u[1300:-1], envelope[1300:-1], err[1300:-1], solarRadius, params, grid = False)
+opt, chiSqArr = intf.bruteForceFit(u[1300:-1], envelope[1300:-1], err[1300:-1], solarRadius, params, grid = True)
+print(opt)
 
-err = np.ones(len(u))*np.std(envelope[1300:-1] - solarRadius(u[1300:-1],(optR, optT)))
-
-results = intf.mcmcFit(u[1300:-1], envelope[1300:-1], err[1300:-1], solarRadius, (optR, optT), 8)
-mcmcR = results[0]
-mcmcT = results[1]
-
-print(optR, optT)
-print(np.rad2deg(mcmcR[0]), np.rad2deg(mcmcR[1]))
-print(mcmcT[0], mcmcT[1])
-print(results[2],results[2]/len(u[1300:-1]-2))
-print(results[3])
-
-print(intf.chiSq(u[1300:-1], envelope[1300:-1], err[1300:-1], solarRadius, (mcmcR[0],mcmcT[0])))
-
-
-
-
-fig, ax = plt.subplots(1,1, figsize = (6,4))
-ax.plot(u,envelope, marker = ".", color = colors.berkeley_blue, alpha = 0.5)
-ax.plot(u, solarRadius(u, [mcmcR[0],mcmcT[0]]), color = colors.california_gold, ls = "-")
+fig, ax = plt.subplots(1,1, figsize = (6,6))
+image = ax.imshow(chiSqArr, cmap = "terrain_r", aspect = "auto", extent = [tParams[0],tParams[-1],np.rad2deg(rParams[0]), np.rad2deg(rParams[-1])], vmax = 1000)
+cbar = fig.colorbar(image)
 
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
 
-ax.set_ylabel("Power (Arbitrary)", fontsize = axesLabelSize)
-ax.set_xlabel("$u$ (Dimensionless)", fontsize = axesLabelSize)
+ax.set_ylabel("Solar Radius (degrees)", fontsize = axesLabelSize)
+ax.set_xlabel("Power (Arbitrary)", fontsize = axesLabelSize)
 
+cbar.set_label("Chi Squared", fontsize = axesLabelSize)
 
 plt.tight_layout()
-plt.savefig("./figures/pngs/fig6.png")
-plt.savefig("./figures/pdfs/fig6.pdf")
+plt.savefig("./figures/pngs/fig7.png")
+plt.savefig("./figures/pdfs/fig7.pdf")

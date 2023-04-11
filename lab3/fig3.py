@@ -96,6 +96,8 @@ image = ax.imshow(chiSqArr, cmap = "terrain_r", aspect = "auto", extent = [minNS
 cbar = fig.colorbar(image)
 print(opt[0],opt[1])
 print(optEW, optNS)
+print(intf.chiSq(hourAngle, avgFringeSpeed, err, localFringeFrequency, (opt[0],opt[1])))
+print(minEW, maxEW, minNS, maxNS)
 
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)

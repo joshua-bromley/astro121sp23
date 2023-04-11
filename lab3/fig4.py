@@ -86,7 +86,10 @@ print(optA,optB)
 
 
 
-mcmcA, mcmcB = intf.mcmcFit(hourAngle, avgFringeSpeed, err, localFringeFrequency, [optA,optB], 32)
+results = intf.mcmcFit(hourAngle, avgFringeSpeed, err, localFringeFrequency, [optA,optB], 32)
+
+mcmcA = results[0]
+mcmcB = results[1]
 
 baselineEW = (mcmcA[0])/(np.cos(dec)*earthRotRate)
 baselineNS = (mcmcB[0])/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
@@ -94,6 +97,8 @@ ewErr = (mcmcA[1])/(np.cos(dec)*earthRotRate)
 nsErr = (mcmcB[1])/(np.cos(dec)*np.sin(np.deg2rad(ug.nch.lat))*earthRotRate)
 print(baselineEW, ewErr)
 print(baselineNS, nsErr)
+print(results[2],results[2]/38)
+print(results[3])
 
 fig, ax = plt.subplots(1,1, figsize = (6,4))
 ax.errorbar(hourAngle, avgFringeSpeed, yerr = err, marker = ".", ls = "", color = colors.berkeley_blue)

@@ -44,9 +44,10 @@ fringePattern = np.transpose(data)[150][9000:]
 hourAngle = hourAngle[9000:]
 
 fig, ax = plt.subplots(1,1, figsize = (12,4))
-ax.plot(hourAngle, np.real(fringePattern), color = colors.berkeley_blue, alpha = 0.8)
-ax.plot(hourAngle, np.imag(fringePattern), color = colors.lap_lane, alpha = 0.8)
-ax.plot(hourAngle, np.abs(fringePattern), color = colors.california_gold, alpha = 0.8)
+ax.plot(hourAngle, np.real(fringePattern), color = colors.berkeley_blue, alpha = 0.8, label = "Real")
+ax.plot(hourAngle, np.imag(fringePattern), color = colors.lap_lane, alpha = 0.8, label = "Imaginary")
+ax.plot(hourAngle, np.abs(fringePattern), color = colors.california_gold, alpha = 0.8, label = "Absolute Value") 
+ax.legend(frameon = False, fontsize = textSize)
 
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "major", direction = "in", labelsize = tickLabelSize, pad = 10)
 ax.tick_params(axis = 'x', bottom = True, top = False, which = "minor", direction = "in", labelsize = tickLabelSize, pad = 10)
