@@ -19,6 +19,7 @@ velocitiesLow = dataLow[0][0:1024]
 signalLowFlat = np.divide(signalLow, calLow)*gain
 
 velocitiesLowFit = np.concatenate((velocitiesLow[0:120],velocitiesLow[540:-1]))
+print(velocitiesLow[[0,120,540,-1]])
 signalLowFit = np.concatenate((signalLowFlat[0:120],signalLowFlat[540:-1]))
 err = 3.72902*np.ones(len(signalLowFit))
 
@@ -55,6 +56,7 @@ velocitiesHigh = dataHigh[0][1024:]
 
 
 velocitiesHighFit = np.concatenate((velocitiesHigh[0:540], velocitiesHigh[-75:]))
+print(velocitiesHigh[[0,540,-75,-1]])
 signalHighFit = np.concatenate((signalHighFlat[0:540],signalHighFlat[-75:]))
 err = 3.46*np.ones(len(signalHighFit))
 
@@ -98,6 +100,7 @@ index = np.where(np.abs(velocitiesHigh -0.000162776529940715) < 0.0000001)
 
 
 avgSignal = np.mean((lowFlat[120:565], highFlat[504:-75]), axis = 0)
+print(velocitiesHigh[[540,-75]])
 
 np.savetxt("./lab2data/flattenedSignal.gz", (velocitiesLow[120:565], avgSignal))
 

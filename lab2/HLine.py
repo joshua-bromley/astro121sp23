@@ -69,6 +69,9 @@ v = ugradio.doppler.get_projected_velocity(ra, dec, jd).value/3e8
 velocitiesLow = v-((freqsLow- nu)/nu)
 velocitiesHigh = v-((freqsHigh -nu)/nu)
 
+print(freqsLow[-1],freqsLow[0])
+print(freqsHigh[0], freqsHigh[1024])
+
 np.savetxt("./lab2data/LO1419.gz",[velocitiesLow, powSpecLow, freqsLow])
 np.savetxt("./lab2data/LO1420.gz",[velocitiesHigh, powSpecHigh, freqsHigh])
 

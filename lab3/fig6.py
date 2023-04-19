@@ -44,6 +44,7 @@ data, times, frequencies, _ = intf.readData(filepath, 11862, 500, 800)
 
 envelope, err = intf.rollingAverage(np.abs(np.transpose(data)[150]), 20)
 times = times[0:-1]
+err = intf.fourierFilter(envelope, 150,300)
 
 
 #envelope,times = intf.getEnvelope(np.real(np.transpose(data)[150]), times, 15)
@@ -90,7 +91,7 @@ for r in rParams:
 
 optR, optT = intf.bruteForceFit(u[1300:-1], envelope[1300:-1], err[1300:-1], solarRadius, params, grid = False)
 
-err = np.ones(len(u))*np.std(envelope[1300:-1] - solarRadius(u[1300:-1],(optR, optT)))
+#err = np.ones(len(u))*np.std(envelope[1300:-1] - solarRadius(u[1300:-1],(optR, optT)))
 
 results = intf.mcmcFit(u[1300:-1], envelope[1300:-1], err[1300:-1], solarRadius, (optR, optT), 8)
 mcmcR = results[0]
