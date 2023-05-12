@@ -7,10 +7,10 @@ import cartopy.crs as ccrs
 npz = np.load("./lab4data/processedSpectra.npz", allow_pickle=True)
 
 
-temperature = npz["temp"]
-speeds = npz["speed"]
+temperature = npz["tempErr"]
+speeds = npz["vErr"]
 metadata = npz["coord"]
-sigma = npz["sigma"]
+sigma = npz["sigmaErr"]
 chiSq = npz["chiSq"]
 
 fails = []
@@ -61,10 +61,9 @@ for i in range(len(temperature)):
 tempGrid = maps.interpolate(newTemps,l,b,160,221,-70,-12,0.25,0.25)
 vGrid = maps.interpolate(newSpeeds,l,b,160,221,-70,-12,0.25,0.25)
 sigmaGrid = maps.interpolate(newSigmas,l,b,160,221,-70,-12,0.25,0.25)
-chiSqGrid = maps.interpolate(chiSq,l,b,160,221,-70,-12,1,1)
+chiSqGrid = maps.interpolate(chiSq,l,b,160,221,-70,-12,0.25,0.25)
  
 
-vGrid[0][0] = -np.min(vGrid)
 #farVGrid = maps.interpolate(farV,l,b,160,221,-70,-12,0.5,0.5)
 
 
@@ -82,9 +81,9 @@ vGrid[0][0] = -np.min(vGrid)
 #    for j in range(len(imgGrid[0])):
 #        imgGrid[i][j] = [nearVGrid[i][j],0,farVGrid[i][j],tempGrid[i][j]]
 
-fig = plt.figure(figsize = (5,5))
+fig = plt.figure(figsize = (11,11))
 
-ax = fig.add_subplot(1,1,1,projection = ccrs.Mollweide(central_longitude=180))
+ax = fig.add_subplot(2,2,1,projection = ccrs.Mollweide(central_longitude=180))
 img = ax.imshow(tempGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
@@ -95,15 +94,9 @@ cbar.set_label("Temperature (K)", fontsize = 14)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = 10, pad = 10)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
 
-fig.savefig("./images/tempMap.png")
-fig.savefig("./figures/tempMap.pdf")
 
-
-
-fig = plt.figure(figsize = (5,5))
-
-ax = fig.add_subplot(1,1,1,projection = ccrs.Mollweide(central_longitude=180))
-img = ax.imshow(vGrid*1e-3, cmap = "RdBu_r", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
+ax = fig.add_subplot(2,2,2,projection = ccrs.Mollweide(central_longitude=180))
+img = ax.imshow(vGrid*1e-3, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
@@ -113,12 +106,8 @@ cbar.set_label("Velocity (km/s)", fontsize = 14)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = 10, pad = 10)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
 
-fig.savefig("./images/vMap.png")
-fig.savefig("./figures/vMap.pdf")
 
-fig = plt.figure(figsize = (5,5))
-
-ax = fig.add_subplot(1,1,1,projection = ccrs.Mollweide(central_longitude=180))
+ax = fig.add_subplot(2,2,3,projection = ccrs.Mollweide(central_longitude=180))
 img = ax.imshow(sigmaGrid*1e-3, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
@@ -129,16 +118,19 @@ cbar.set_label("Signal Width (km/s)", fontsize = 14)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = 10, pad = 10)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
 
-fig.savefig("./images/sigmaMap.png")
-fig.savefig("./figures/sigmaMap.pdf")
+ax = fig.add_subplot(2,2,4,projection = ccrs.Mollweide(central_longitude=180))
+img = ax.imshow(chiSqGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
+ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
+ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
+ax.set_xlabel("$\ell$", fontsize = 25)
+ax.set_ylabel("$b$", fontsize = 25)
+cbar = fig.colorbar(img)
+cbar.set_label("Reduced Chi Squared", fontsize = 14)
+cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = 10, pad = 10)
+cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
 
-plt.clf()
-
-ax2 = plt.axes(projection = ccrs.Mollweide(central_longitude=180))
-img = ax2.imshow(chiSqGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
-ax2.set_extent([140,240,-90,00], crs = ccrs.PlateCarree())
-plt.colorbar(img)
-plt.savefig("./images/chiSqMap.png")
+fig.savefig("./images/errorMap.png")
+fig.savefig("./figures/errorMap.pdf")
 
 '''
 deltaV = []

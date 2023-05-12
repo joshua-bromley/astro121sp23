@@ -22,24 +22,24 @@ chiSq = []
 
 
 
-
+badData = []
 for i in tqdm(range(len(pol0))):
     data = []
     err = []
     if np.mean(pol0[i]) > 0 and np.mean(pol1[i]) > 0:
         data = (pol0[i]+pol1[i])/2
         err = (np.abs(pol0Err[i])+np.abs(pol1Err[i]))/2
-    elif np.mean(pol0[i]) <= 0:
+    elif np.mean(pol0[i]) <= 0 and np.mean(pol1[i]) > 0:
         data = pol1[i]
         err = pol1Err[i]
-    elif np.mean(pol1[i]) <= 0:
+    elif np.mean(pol1[i]) <= 0 and np.mean(pol0[i]) > 0:
         data = pol0[i]
         err = pol0Err[i]
 
     else:
         data = np.zeros_like(pol0[i])
         err = np.ones_like(pol0[i])
-        print("Data bad")
+        badData.append(i)
     prominence = maps.getProminence(data)
     indecies = np.argsort(prominence)
     if np.abs(velocities[i][indecies[-1]] - velocities[i][indecies[-2]]) > 10000:
@@ -70,3 +70,4 @@ for i in tqdm(range(len(pol0))):
 
 
 np.savez("./lab4data/processedSpectra", temp = temperatures, speed = speeds,coord = metadata,sigma =spreads, tempErr = tempErr, vErr = speedsErr, sigmaErr = spreadsErr, chiSq = chiSq)
+print(badData)
