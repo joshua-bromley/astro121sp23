@@ -57,13 +57,13 @@ for i in range(len(temperature)):
     if newSpeeds[-1] > 15000:
         print(i)
 
-tempGrid = maps.interpolate(newTemps,l,b,160,221,-70,-12,1,1)
+vGrid = maps.interpolate(newSpeeds,l,b,160,221,-70,-12,1,1)
 
 fig = plt.figure(figsize = (5,5))
 
 ax = fig.add_subplot(1,1,1,projection = ccrs.Mollweide(central_longitude=180))
-img = ax.imshow(tempGrid, cmap = "cividis", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
-ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
+img = ax.imshow(vGrid, cmap = "jet", extent = [221,160,-70,-12], transform = ccrs.PlateCarree())
+ax.set_extent([140,240,-80,5], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
 ax.set_ylabel("$b$", fontsize = 25)
@@ -72,7 +72,7 @@ cbar.set_label("Temperature (K)", fontsize = 14)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = 10, pad = 10)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
 
-ax.plot(l[150],b[150], zorder = 1, marker = "*", color = "r", transform = ccrs.PlateCarree())
+ax.plot(230,0, zorder = 1, marker = "*", color = "r", transform = ccrs.PlateCarree())
 
 plt.tight_layout()
 plt.savefig("./images/mapTest.png")

@@ -104,7 +104,7 @@ fig = plt.figure(figsize = (5,5))
 
 ax = fig.add_subplot(1,1,1,projection = ccrs.Mollweide(central_longitude=180))
 img = ax.imshow(vGrid*1e-3, cmap = "RdBu_r", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
-ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
+ax.set_extent([150,231,-75,1], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
 ax.set_ylabel("$b$", fontsize = 25)
@@ -112,6 +112,8 @@ cbar = fig.colorbar(img)
 cbar.set_label("Velocity (km/s)", fontsize = 14)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", direction = "in", labelsize = 10, pad = 10)
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
+ax.plot(230,0, zorder = 1, marker = "*", color = "r", transform = ccrs.PlateCarree())
+
 
 fig.savefig("./images/vMap.png")
 fig.savefig("./figures/vMap.pdf")
