@@ -294,11 +294,11 @@ def ga2eq(l,b):
     return ra, dec
 
 def interpolate(data, l, b, lmin, lmax, bmin, bmax, dl, db):
-    dataGrid = np.full([int((lmax-lmin)/dl)+1,int((bmax-bmin)/db)+1], np.pi)
+    dataGrid = np.full([int((bmax-bmin)/db)+1,int((lmax-lmin)/dl)+1], np.pi)
     for i in range(len(data)):
         x = int((l[i]-lmin)/dl)
         y = int((b[i]-bmin)/db)
-        dataGrid[x][y] = data[i]
+        dataGrid[y][x] = data[i]
 
     interpGrid = np.zeros_like(dataGrid)
     
