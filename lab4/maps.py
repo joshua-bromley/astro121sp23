@@ -317,8 +317,10 @@ def interpolate(data, l, b, lmin, lmax, bmin, bmax, dl, db):
                         if dataGrid[di][dj] != np.pi:
                             total += dataGrid[di][dj]/distance
                             length += 1/distance
-                
-                interpGrid[i][j] = total/length
+                if total == 0:
+                    interpGrid[i][j] = 0
+                else:
+                    interpGrid[i][j] = total/length
     
     return interpGrid
 
