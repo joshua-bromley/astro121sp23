@@ -30,6 +30,8 @@ ax = fig.add_subplot(1,1,1,projection = ccrs.Mollweide(central_longitude=180))
 for i in range(len(l)):
     if i in fails:
         ax.plot(l[i],b[i], marker = "o", ls = "", color = colors.berkeley_blue, alpha = 0.25, transform = ccrs.PlateCarree())
+    elif len(temperature[i]) == 2:
+        ax.plot(l[i],b[i], marker = "o", ls = "", color = colors.california_gold, alpha = 1, transform = ccrs.PlateCarree())
     else:
         ax.plot(l[i],b[i], marker = "o", ls = "", color = colors.berkeley_blue, alpha =1, transform = ccrs.PlateCarree())
 

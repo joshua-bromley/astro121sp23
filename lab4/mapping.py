@@ -46,7 +46,7 @@ newTemps = []
 newSpeeds = []
 newSigmas = []
 for i in range(len(temperature)):
-    if speeds[i][0] < speeds[i][-1]:
+    if speeds[i][0] > speeds[i][-1]:
         newTemps.append(temperature[i][0])
         newSpeeds.append(speeds[i][0])
         newSigmas.append(sigma[i][0])

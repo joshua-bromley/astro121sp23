@@ -37,7 +37,7 @@ pol0 = np.delete(pol0, fails, axis = 0)
 v = np.delete(v, fails, axis = 0)
 
 
-i = np.argmax(temperature)
+i = np.argmax(speeds)
 
 print(metadata[i],metadata1[i])
 print(temperature[i])
