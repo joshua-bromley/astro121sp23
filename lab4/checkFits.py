@@ -110,7 +110,8 @@ ax[1].tick_params(axis = 'y', bottom = True, top = True, which = "minor", direct
 ax[1].set_xlabel("Velocity km/s", fontsize = axesLabelSize)
 ax[1].set_ylabel("Temperature (K)", fontsize = axesLabelSize)
 
-i = 300
+
+i = 24
 print(temperature[i][0])
 data = []
 if np.mean(pol0[i]) > 0 and np.mean(pol1[i]) > 0:
@@ -141,9 +142,12 @@ ax[0].set_xlabel("Velocity km/s", fontsize = axesLabelSize)
 ax[0].set_ylabel("Temperature (K)", fontsize = axesLabelSize)
 
 
+print(np.diag(cov))
+
+
 
 plt.tight_layout()
 
 
 fig.savefig("./images/fitCheck.png")
-fig.savefig("./figures/fitting.pdf")
+#fig.savefig("./figures/fitting.pdf")

@@ -84,7 +84,7 @@ chiSqGrid = maps.interpolate(chiSq,l,b,160,221,-70,-12,0.25,0.25)
 fig = plt.figure(figsize = (11,11))
 
 ax = fig.add_subplot(2,2,1,projection = ccrs.Mollweide(central_longitude=180))
-img = ax.imshow(tempGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
+img = ax.imshow(tempGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree(), origin = "lower", vmax = 20)
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
@@ -96,7 +96,7 @@ cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", dire
 
 
 ax = fig.add_subplot(2,2,2,projection = ccrs.Mollweide(central_longitude=180))
-img = ax.imshow(vGrid*1e-3, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
+img = ax.imshow(vGrid*1e-3, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree(), origin = "lower", vmax = 60)
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
@@ -108,7 +108,7 @@ cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", dire
 
 
 ax = fig.add_subplot(2,2,3,projection = ccrs.Mollweide(central_longitude=180))
-img = ax.imshow(sigmaGrid*1e-3, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
+img = ax.imshow(sigmaGrid*1e-3, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree(), origin = "lower", vmax = 5)
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
@@ -119,7 +119,7 @@ cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "major", dire
 cbar.ax.tick_params(axis = 'y', bottom = True, top = True, which = "minor", direction = "in", labelsize = 10, pad = 10)
 
 ax = fig.add_subplot(2,2,4,projection = ccrs.Mollweide(central_longitude=180))
-img = ax.imshow(chiSqGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree())
+img = ax.imshow(chiSqGrid, cmap = "jet", extent = [160,221,-70,-12], transform = ccrs.PlateCarree(), origin = "lower")
 ax.set_extent([160,221,-70,-12], crs = ccrs.PlateCarree())
 ax.gridlines( draw_labels = True, x_inline = False, y_inline = False)
 ax.set_xlabel("$\ell$", fontsize = 25)
